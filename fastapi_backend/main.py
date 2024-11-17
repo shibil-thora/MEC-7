@@ -3,7 +3,8 @@ from models import TestModel
 from fastapi.middleware.cors import CORSMiddleware 
 import os 
 from fastapi.staticfiles import StaticFiles 
-from database import engine, entries, areas 
+from database import engine, entries, areas  
+from sqlalchemy import select
 
 
 app = FastAPI() 
@@ -23,9 +24,28 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 @app.get("/api/get_data")
 async def get_data():
-    return {
-        "data": f"{'helo guys'}",
-    }   
+    with engine.connect() as conn: 
+        related = areas.join(entries) 
+        select_all = select(
+            areas.c.area_name, 
+            entries.c.image,
+            entries.c.video, 
+            entries.c.gents_count, 
+            entries.c.ladies_count, 
+            entries.c.gents_lead_by, 
+            entries.c.ladies_lead_by,
+        ).select_from(related) 
+        result = conn.execute(select_all).fetchall() 
+        data = [{
+            "heading": entry[0],
+            "photo": entry[1],
+            "video": entry[2],
+            "gentsCount": entry[3],
+            "ladiesCount": entry[4], 
+            "gentsLeadBy": entry[5], 
+            "ladiesLeadBy": entry[6],    
+        } for entry in result]
+    return data 
 
 
 @app.get("/api/get_areas")
@@ -44,7 +64,8 @@ async def submit_form(
     gentsLead: str = Form(...),
     ladiesLead: str = Form(...),
     gentsCount: int = Form(...),
-    ladiesCount: int = Form(...),
+    ladiesCount: int = Form(...), 
+    area: str = Form(...),
     video: str = Form(...),
     image: UploadFile = File(...),
 ):
@@ -58,16 +79,23 @@ async def submit_form(
         
         form_data = {
             "date": date,
-            "gentsLead": gentsLead,
-            "ladiesLead": ladiesLead,
-            "gentsCount": gentsCount,
-            "ladiesCount": ladiesCount,
-            "video": video,
-            "image_path": file_path,
+            "gents_lead_by": gentsLead,
+            "ladies_lead_by": ladiesLead,
+            "gents_count": gentsCount,
+            "ladies_count": ladiesCount,
+            "video": video, 
+            "image": file_path[8:],
         } 
 
-        with engine.connect() as conn: 
-            pass
+        with engine.connect() as conn:  
+            print('coming inside with')
+            foreign_key_result = conn.execute(areas.select().where(areas.c.area_name == area)).fetchall() 
+            foreign_key_id = foreign_key_result[0][0] 
+            form_data["area_id"] = foreign_key_id
+
+            conn.execute(entries.insert(), [form_data]) 
+            conn.commit()
+            
 
         print(form_data, type(form_data))
         return {"message": "Form submitted successfully", "data": form_data}

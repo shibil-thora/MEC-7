@@ -197,7 +197,7 @@ function Admin() {
                   Select Branch
                 </option> 
                 {areas && areas.map((area) => (
-                  <option value="Area 1">{area.area_name}</option>
+                  <option value={area.area_name}>{area.area_name}</option>
                 ))}
               </select>
             </div>

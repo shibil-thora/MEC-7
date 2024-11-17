@@ -1,9 +1,10 @@
 import React from 'react'; 
 import { useState, useEffect } from 'react'; 
 import axios from 'axios';
-import { backend_url } from '../../utils/urls';
+import { backend_url } from '../../utils/urls'; 
+import YouTubeEmbed from '../Youtube/Youtube';
 
-const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount }) => {
+const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount, gentsLeadBy, ladiesLeadBy }) => {
   useEffect(() => {
     axios.get(`${backend_url}/api/get_data`).then((res) => {
       console.log(res.data)
@@ -32,7 +33,7 @@ const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount }) => {
             </div>
             <div className="flex flex-col">
               <span className="text-gray-700 text-lg font-medium">Gents</span>
-              <span className="text-gray-600 font-semibold text-sm">Lead by: Mohammad Ali</span>
+              <span className="text-gray-600 font-semibold text-sm">Lead by: {gentsLeadBy}</span>
             </div>
           </div>
 
@@ -46,7 +47,7 @@ const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount }) => {
             </div>
             <div className="flex flex-col">
               <span className="text-gray-700 text-lg font-medium">Ladies</span>
-              <span className="text-gray-600 font-semibold text-sm">Lead by: Sarah Khan</span>
+              <span className="text-gray-600 font-semibold text-sm">Lead by: {ladiesLeadBy}</span>
             </div>
           </div>
         </div>
@@ -55,10 +56,8 @@ const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount }) => {
 
       {/* Right Section: Video */}
       <div className="md:w-1/2 p-6 mt-14">
-        <video controls className="w-full h-64 object-cover rounded-lg">
-          <source src={video} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+      <YouTubeEmbed youtubeUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" />
+
       </div>
     </div>
   );
