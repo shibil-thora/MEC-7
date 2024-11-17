@@ -1,7 +1,10 @@
 from fastapi import FastAPI, Form, File, UploadFile
 from models import TestModel 
 from fastapi.middleware.cors import CORSMiddleware 
-import os
+import os 
+from fastapi.staticfiles import StaticFiles 
+from database import engine, entries, areas 
+
 
 app = FastAPI() 
 app.add_middleware(
@@ -15,15 +18,27 @@ app.add_middleware(
 UPLOAD_FOLDER = "uploads" 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 
 @app.get("/api/get_data")
 async def get_data():
     return {
         "data": f"{'helo guys'}",
-    }  
+    }   
 
 
-@app.post("/add-entry/")
+@app.get("/api/get_areas")
+async def get_data(): 
+    with engine.connect() as conn: 
+        result = conn.execute(areas.select()).fetchall() 
+
+        data = [{"id": area[0], "area_name": area[1]} for area in result]
+
+    return data
+
+
+@app.post("/add_entry")
 async def submit_form(
     date: str = Form(...),
     gentsLead: str = Form(...),
@@ -49,9 +64,12 @@ async def submit_form(
             "ladiesCount": ladiesCount,
             "video": video,
             "image_path": file_path,
-        }
+        } 
 
-         
+        with engine.connect() as conn: 
+            pass
+
+        print(form_data, type(form_data))
         return {"message": "Form submitted successfully", "data": form_data}
 
     except Exception as e:

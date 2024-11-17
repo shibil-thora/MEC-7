@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
 import { backend_url } from "../../utils/urls";
+import { getCurrentDate } from "../../utils/funcs";
 
 function Admin() {
   // Form state management
   const [form, setForm] = useState({
-    date: "",
+    date: getCurrentDate(),
     gentsLead: "",
     ladiesLead: "",
     gentsCount: "",
@@ -16,8 +17,15 @@ function Admin() {
     video: "", // YouTube link field
   });
 
-  // State for submission message
-  const [message, setMessage] = useState("");
+  const [areas, setAreas] = useState([]); 
+  const [message, setMessage] = useState(""); 
+
+  useEffect(() => {
+    axios.get(`${backend_url}/api/get_areas`).then((res) => {
+      setAreas(res.data) 
+      console.log(res.data)
+    })
+  }, [])
 
   // Handling input changes
   const handleChange = (e) => {
@@ -187,10 +195,10 @@ function Admin() {
               >
                 <option value="" disabled>
                   Select an Area
-                </option>
-                <option value="Area 1">Area 1</option>
-                <option value="Area 2">Area 2</option>
-                <option value="Area 3">Area 3</option>
+                </option> 
+                {areas && areas.map((area) => (
+                  <option value="Area 1">{area.area_name}</option>
+                ))}
               </select>
             </div>
 

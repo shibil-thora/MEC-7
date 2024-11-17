@@ -12,7 +12,7 @@ meta = MetaData()
 areas = Table(
     'areas', meta, 
     Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('area_name', String(255)),
+    Column('area_name', String(255), index=True),
 )  
 
 entries = Table(
