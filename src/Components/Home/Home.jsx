@@ -1,5 +1,7 @@
 import React from 'react';
-import FlexBox from '../FlexBox/FlexBox';
+import FlexBox from '../FlexBox/FlexBox'; 
+import Navbar from '../Navbar/Navbar'; 
+import Footer from '../Footer/Footer';
 
 const Home = () => { 
   const demoData = [
@@ -28,6 +30,7 @@ const Home = () => {
   
   return (
     <>
+      <Navbar />
       <div className="flex flex-col h-screen ">
         <div className="flex-grow overflow-y-auto mt-16 mb-16"> {/* Adjust margin to avoid overlap */}
           {demoData.map((item, index) => (
@@ -41,7 +44,8 @@ const Home = () => {
             />
           ))}
         </div>
-      </div>
+      </div> 
+      <Footer />
     </>
   );
 };
