@@ -3,12 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@400;700&family=Poppins:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- SEO Metadata -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MEC-7</title>
+    <meta name="description" content="Join MEC Seven, a vibrant group dedicated to daily morning exercise and wellness. Stay fit, connect with like-minded individuals, and embrace a healthier lifestyle with MEC 7." />
+    <meta name="keywords" content="MEC Seven, MEC7, MEC 7, morning exercise, daily exercise group, fitness group, wellness, healthy lifestyle, workout group" />
+    <meta name="author" content="MEC Seven" />
+    <meta property="og:title" content="MEC Seven - Morning Exercise for a Healthier You" />
+    <meta property="og:description" content="Discover MEC Seven, the group that starts the day with energizing morning exercises. Join us for fitness, fun, and community." />
+    <meta property="og:image" content="/images/mec-seven-og-image.jpg" />
+    <meta property="og:url" content="https://mecseven.in" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MEC Seven - Morning Exercise Group" />
+    <meta name="twitter:description" content="Stay active and healthy with MEC 7, your daily morning exercise group." />
+    <meta name="twitter:image" content="/images/mec-seven-twitter-image.jpg" />
+
+    <!-- Title -->
+    <title>MEC Seven - Morning Exercise Group | MEC7</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@400;700&family=Poppins:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD for SEO) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "MEC Seven",
+        "url": "https://mecseven.in",
+        "logo": "/images/mec-seven-logo.png",
+        "description": "MEC Seven is a dedicated group promoting morning exercise and wellness. Join us to kickstart your day with fitness and community.",
+        "sameAs": [
+          "https://facebook.com/mecseven",
+          "https://instagram.com/mecseven",
+          "https://twitter.com/mecseven"
+        ]
+      }
+    </script>
+
+    <!-- Additional SEO-friendly Features -->
+    <link rel="canonical" href="https://mecseven.in" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Stylesheet (Optional for Visual Improvement) -->
+    <link rel="stylesheet" href="/styles/main.css" />
   </head>
   <body>
-    <div id="root"></div>
+    <header>
+      <h1>MEC Seven - Start Your Day with Morning Exercise</h1>
+      <nav>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#benefits">Benefits</a></li>
+          <li><a href="#join">Join Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+    
+    <main id="root">
+      <!-- React will render the main content here -->
+    </main>
+    
+    <footer>
+      <p>&copy; 2024 MEC Seven. All rights reserved.</p>
+      <p>Connect with us on <a href="https://facebook.com/mecseven">Facebook</a>, <a href="https://instagram.com/mecseven">Instagram</a>, and <a href="https://twitter.com/mecseven">Twitter</a>.</p>
+    </footer>
+
+    <!-- React Script -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
