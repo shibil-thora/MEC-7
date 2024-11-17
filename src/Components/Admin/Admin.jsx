@@ -8,13 +8,14 @@ function Admin() {
     ladiesLead: "",
     gentsCount: "",
     ladiesCount: "",
+    area: "", // New field
     image: null,
-    video: null,
+    video: "",
   });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "image" || name === "video") {
+    if (name === "image") {
       setForm({ ...form, [name]: files[0] });
     } else {
       setForm({ ...form, [name]: value });
@@ -23,7 +24,7 @@ function Admin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(form); // You can process or send the form data here
+    console.log(form); // Process or send the form data here
   };
 
   return (
@@ -122,6 +123,28 @@ function Admin() {
               />
             </div>
 
+            {/* Area Dropdown */}
+            <div>
+              <label htmlFor="area" className="block text-gray-700 font-medium mb-2">
+                Select Area
+              </label>
+              <select
+                id="area"
+                name="area"
+                value={form.area}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              >
+                <option value="" disabled>
+                  Select an Area
+                </option>
+                <option value="Area 1">Area 1</option>
+                <option value="Area 2">Area 2</option>
+                <option value="Area 3">Area 3</option>
+              </select>
+            </div>
+
             {/* Image Upload */}
             <div>
               <label htmlFor="image" className="block text-gray-700 font-medium mb-2">
@@ -138,17 +161,18 @@ function Admin() {
               />
             </div>
 
-            {/* Video Upload */}
+            {/* YouTube Video Link */}
             <div>
               <label htmlFor="video" className="block text-gray-700 font-medium mb-2">
-                Upload Video
+                YouTube Video Link
               </label>
               <input
-                type="file"
+                type="url"
                 id="video"
                 name="video"
-                accept="video/*"
+                value={form.video}
                 onChange={handleChange}
+                placeholder="Enter YouTube Video URL"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required
               />
