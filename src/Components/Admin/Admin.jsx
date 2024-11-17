@@ -56,7 +56,7 @@ function Admin() {
     }
 
     try {
-      const response = await axios.post(`${backend_url}/add_entry/`, formData, {
+      const response = await axios.post(`${backend_url}/add_entry`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
