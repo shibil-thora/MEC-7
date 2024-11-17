@@ -1,35 +1,82 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Navbar from "../Navbar/Navbar";
+import { backend_url } from "../../utils/urls";
 
 function Admin() {
+  // Form state management
   const [form, setForm] = useState({
     date: "",
     gentsLead: "",
     ladiesLead: "",
     gentsCount: "",
     ladiesCount: "",
-    area: "", // New field
-    image: null,
-    video: "",
+    area: "", // Area selection field
+    image: null, // File field
+    video: "", // YouTube link field
   });
 
+  // State for submission message
+  const [message, setMessage] = useState("");
+
+  // Handling input changes
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image") {
+      // If the input is an image, use the file
       setForm({ ...form, [name]: files[0] });
     } else {
       setForm({ ...form, [name]: value });
     }
   };
 
-  const handleSubmit = (e) => {
+  // Form submission handler
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form); // Process or send the form data here
+
+    const formData = new FormData();
+    formData.append("date", form.date);
+    formData.append("gentsLead", form.gentsLead);
+    formData.append("ladiesLead", form.ladiesLead);
+    formData.append("gentsCount", form.gentsCount);
+    formData.append("ladiesCount", form.ladiesCount);
+    formData.append("area", form.area);
+    formData.append("video", form.video);
+
+    if (form.image) {
+      formData.append("image", form.image);
+    }
+
+    try {
+      const response = await axios.post(`${backend_url}/add_entry/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      setMessage("Form submitted successfully!");
+      console.log("Response:", response.data);
+
+      // Clear form after submission
+      setForm({
+        date: "",
+        gentsLead: "",
+        ladiesLead: "",
+        gentsCount: "",
+        ladiesCount: "",
+        area: "",
+        image: null,
+        video: "",
+      });
+    } catch (error) {
+      setMessage("Failed to submit the form. Please try again.");
+      console.error("Error:", error);
+    }
   };
 
   return (
     <>
-      {/* Fixed Navbar */}
+      {/* Navbar */}
       <Navbar />
 
       {/* Main Content */}
@@ -38,6 +85,8 @@ function Admin() {
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
             Admin Panel
           </h2>
+
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Date Picker */}
             <div>
@@ -187,6 +236,13 @@ function Admin() {
                 Submit
               </button>
             </div>
+
+            {/* Submission Message */}
+            {message && (
+              <div className="mt-4 text-center text-lg font-semibold">
+                {message}
+              </div>
+            )}
           </form>
         </div>
       </div>

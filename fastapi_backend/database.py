@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, ForeignKey, Boolean  
 from sqlalchemy import UniqueConstraint
 import os 
-from dotenv import load_dotenv 
+from dotenv import load_dotenv  
 
 
 load_dotenv()
