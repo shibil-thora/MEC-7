@@ -58,7 +58,7 @@ async def get_data():
     return data
 
 
-@app.post("/add_entry")
+@app.post("/api/add_entry")
 async def submit_form(
     date: str = Form(...),
     gentsLead: str = Form(...),
