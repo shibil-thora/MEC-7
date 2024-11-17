@@ -19,7 +19,7 @@ app.add_middleware(
 UPLOAD_FOLDER = "uploads" 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.mount("/uploads", StaticFiles(directory="/home/ubuntu/MEC-7/fastapi_backend/uploads"), name="uploads")
 
 
 @app.get("/api/get_data")
