@@ -183,7 +183,7 @@ function Admin() {
             {/* Area Dropdown */}
             <div>
               <label htmlFor="area" className="block text-gray-700 font-medium mb-2">
-                Select Area
+                Select Branch
               </label>
               <select
                 id="area"
@@ -194,7 +194,7 @@ function Admin() {
                 required
               >
                 <option value="" disabled>
-                  Select an Area
+                  Select Branch
                 </option> 
                 {areas && areas.map((area) => (
                   <option value="Area 1">{area.area_name}</option>
