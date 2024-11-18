@@ -56,7 +56,7 @@ const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount, gentsLeadBy, 
 
       {/* Right Section: Video */}
       <div className="md:w-1/2 p-6 mt-14">
-      <YouTubeEmbed youtubeUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" />
+      <YouTubeEmbed youtubeUrl={video} />
 
       </div>
     </div>
