@@ -16,7 +16,7 @@ const Navbar = () => {
       <div className="flex items-center space-x-3">
         <img src="/logo-image.png" alt="Logo" className="h-10 object-contain" />
         <a href="/" className="text-xl font-bold text-gray-200">
-          MEC7 KODUR AREA [18-11-2024]
+          MEC7 KODUR AREA [19-11-2024]
         </a>
       </div>
 
