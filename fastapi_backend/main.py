@@ -1,10 +1,13 @@
-from fastapi import FastAPI, Form, File, UploadFile
-from models import TestModel 
+from fastapi import FastAPI, Form, File, UploadFile, HTTPException
+from models import TestModel, LoginModel, UserSignUpMode 
 from fastapi.middleware.cors import CORSMiddleware 
 import os 
 from fastapi.staticfiles import StaticFiles 
 from database import engine, entries, areas  
-from sqlalchemy import select
+from sqlalchemy import select 
+from dotenv import load_dotenv  
+from utils import hash_password, verify_pass
+from database import users
 
 
 app = FastAPI() 
@@ -19,7 +22,7 @@ app.add_middleware(
 UPLOAD_FOLDER = "uploads" 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-app.mount("/uploads", StaticFiles(directory="/home/ubuntu/MEC-7/fastapi_backend/uploads"), name="uploads")
+app.mount("/uploads", StaticFiles(directory=os.environ.get('UPLOADS_DIR')), name="uploads")
 
 
 @app.get("/api/get_data")
@@ -55,7 +58,48 @@ async def get_data():
 
         data = [{"id": area[0], "area_name": area[1]} for area in result]
 
-    return data
+    return data 
+
+
+@app.post("/api/signup")
+async def signup_user(data: UserSignUpMode): 
+    username = data.username
+    mobile_number = data.mobile_number
+    password = data.password
+    area_id = data.area_id
+
+    hashed_pass = hash_password(password) 
+
+    with engine.connect() as conn: 
+        query = users.insert().values(
+            username=username, 
+            mobile_number=mobile_number, 
+            password=hashed_pass, 
+            is_superuser=False, 
+            is_area_admin=False, 
+            area_id=area_id
+        ) 
+        conn.execute(query) 
+        conn.commit()
+    return {'status': 'ok!'} 
+
+
+@app.post("/api/login")
+async def login_user(data: LoginModel): 
+    mobile_number = data.mobile_number
+    password = data.password  
+    with engine.connect() as conn: 
+        result = conn.execute(select(users.c.username, users.c.mobile_number, users.c.password).where(users.c.mobile_number == mobile_number)).fetchall()
+        if not result: 
+            raise HTTPException(status_code=400, detail="Wrong username!")
+        else: 
+            if verify_pass(password, result[0][2]): 
+                return {'message': 'ok!'}   
+            else: 
+                raise HTTPException(status_code=400, detail="Wrong password!")
+
+
+
 
 
 @app.post("/api/add_entry")
@@ -104,6 +148,7 @@ async def submit_form(
         return {"data": "error"}
 
 
-if __name__ == "__main__":
-    import uvicorn
+if __name__ == "__main__": 
+    import uvicorn 
+    load_dotenv()
     uvicorn.run(app, host="0.0.0.0", port=8000)

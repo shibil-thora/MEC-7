@@ -4,6 +4,7 @@ import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
 import axios from 'axios';
 import { backend_url } from '../../utils/urls';
+import { getCurrentDate } from '../../utils/funcs';
 
 const Home = () => { 
   // const demoData = [
@@ -30,18 +31,20 @@ const Home = () => {
   //   }
   // ]; 
 
-  const [demoData, SetDemoData] = useState([]);  
+  const [demoData, SetDemoData] = useState([]);   
+  const [selectedDate, setSelectedDate] = useState(getCurrentDate());
 
   useEffect(() => {
     axios.get(`${backend_url}/api/get_data`).then((res) => {
       console.log(res.data, 'here...') 
-      SetDemoData(res.data)
+      SetDemoData(res.data) 
+      
     })
   }, [])
   
   return (
     <>
-      <Navbar />
+      <Navbar currentDate={selectedDate} setCurrentDate={setSelectedDate} />
       <div className="flex flex-col h-screen ">
         <div className="flex-grow overflow-y-auto mt-16 mb-16"> {/* Adjust margin to avoid overlap */}
           {demoData.map((item, index) => (
