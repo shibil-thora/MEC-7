@@ -189,4 +189,4 @@ async def submit_form(
 if __name__ == "__main__": 
     import uvicorn 
     load_dotenv()
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
