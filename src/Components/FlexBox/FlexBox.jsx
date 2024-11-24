@@ -4,12 +4,7 @@ import axios from 'axios';
 import { backend_url } from '../../utils/urls'; 
 import YouTubeEmbed from '../Youtube/Youtube';
 
-const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount, gentsLeadBy, ladiesLeadBy }) => {
-  useEffect(() => {
-    axios.get(`${backend_url}/api/get_data`).then((res) => {
-      console.log(res.data)
-    })
-  }, [])
+const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount, gentsLeadBy, ladiesLeadBy, date }) => {
 
   return (
     <div className="flex flex-col md:flex-row bg-white rounded-lg  overflow-hidden mb-6">

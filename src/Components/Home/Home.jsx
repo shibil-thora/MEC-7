@@ -35,12 +35,12 @@ const Home = () => {
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
 
   useEffect(() => {
-    axios.get(`${backend_url}/api/get_data`).then((res) => {
+    axios.post(`${backend_url}/api/get_data`, {date: selectedDate}).then((res) => {
       console.log(res.data, 'here...') 
       SetDemoData(res.data) 
       
     })
-  }, [])
+  }, [selectedDate])
   
   return (
     <>

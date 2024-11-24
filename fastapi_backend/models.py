@@ -15,4 +15,12 @@ class UserSignUpMode(BaseModel):
 
 class LoginModel(BaseModel): 
     mobile_number: str 
-    password: str
+    password: str  
+
+
+class VerifyToken(BaseModel): 
+    token: str
+
+
+class GetTodayDataModel(BaseModel): 
+    date: str

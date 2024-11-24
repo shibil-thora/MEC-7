@@ -10,7 +10,7 @@ const Navbar = (props) => {
   };
 
   return (
-    <header className="shadow-md fixed w-full z-40 bg-teal-600">
+    <header className="shadow-md fixed w-full z-40 bg-sky-600">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Left side: Logo and text */}
@@ -21,12 +21,7 @@ const Navbar = (props) => {
             </a>
           </div>
 
-          {/* Center: Navigation Links */}
-          <div className="hidden md:flex md:items-center md:space-x-6">
-            <a href="/" className="text-gray-200 hover:text-gray-400">Home</a>
-            <a href="/about" className="text-gray-200 hover:text-gray-400">About</a>
-            <a href="/contact" className="text-gray-200 hover:text-gray-400">Contact</a>
-          </div>
+         
 
           {/* Right side: Date Picker and Mobile menu toggle button */}
           <div className="flex items-center space-x-4">
@@ -54,7 +49,15 @@ const Navbar = (props) => {
                 </svg>
               </button>
             </div>
+          </div> 
+
+           {/* Center: Navigation Links */}
+           <div className="hidden md:flex md:items-center md:space-x-6">
+            <a href="/" className="text-gray-200 hover:text-gray-400">Home</a>
+            <a href="/about" className="text-gray-200 hover:text-gray-400">About</a>
+            <a href="/contact" className="text-gray-200 hover:text-gray-400">Contact</a>
           </div>
+
         </div>
       </div>
 

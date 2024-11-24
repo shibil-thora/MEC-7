@@ -22,7 +22,7 @@ const YouTubeEmbed = ({ youtubeUrl }) => {
   const embedUrl = getEmbedUrl(youtubeUrl);
 
   if (!embedUrl) {
-    return <p className="text-red-500">Invalid or unsupported YouTube URL</p>;
+    return <p className="text-red-500 hidden">Invalid or unsupported YouTube URL</p>;
   }
 
   return (
