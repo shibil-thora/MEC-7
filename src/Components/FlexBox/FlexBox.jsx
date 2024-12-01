@@ -21,6 +21,8 @@ const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount, gentsLeadBy, 
           className="w-full h-64 object-cover rounded-lg mb-4"
         />
         <div className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-md">
+         {gentsCount && gentsLeadBy && (
+          <>
           {/* Gents Section */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center justify-center bg-sky-900 text-white w-16 h-16 rounded-full text-3xl font-bold">
@@ -31,6 +33,12 @@ const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount, gentsLeadBy, 
               <span className="text-gray-600 font-semibold text-sm">Lead by: {gentsLeadBy}</span>
             </div>
           </div>
+          </>
+         )}
+          
+          
+         {ladiesCount && ladiesLeadBy && (
+          <>
 
           {/* Divider */}
           <div className="h-12 w-px bg-gray-300"></div>
@@ -45,6 +53,10 @@ const FlexBox = ({ heading, photo, video, gentsCount, ladiesCount, gentsLeadBy, 
               <span className="text-gray-600 font-semibold text-sm">Lead by: {ladiesLeadBy}</span>
             </div>
           </div>
+
+          </>
+         )}
+          
         </div>
 
       </div>
