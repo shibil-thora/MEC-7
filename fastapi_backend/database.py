@@ -7,7 +7,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 engine = create_engine(os.environ.get('SQL_CONNECT_URL')) 
-meta = MetaData()
+meta = MetaData() 
+
+main_areas = Table(
+    'main_areas', meta, 
+    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('area_name', String(255), index=True),
+) 
 
 areas = Table(
     'areas', meta, 
@@ -19,7 +25,8 @@ entries = Table(
     'entries', meta, 
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('date', String(255), index=True), 
-    Column('area_id', Integer, ForeignKey('areas.id'), index=True), 
+    Column('area_id', Integer, ForeignKey('areas.id'), index=True),  
+    Column('main_area_id', Integer, ForeignKey('main_areas.id'), index=True),  
     Column('image', String(255)), 
     Column('video', String(255)), 
     Column('gents_lead_by', String(255)), 
