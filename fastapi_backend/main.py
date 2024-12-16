@@ -7,7 +7,8 @@ from database import engine, entries, areas
 from sqlalchemy import select 
 from dotenv import load_dotenv  
 from utils import hash_password, verify_pass, create_token, decode_token
-from database import users 
+from database import users  
+from database import zone, main_areas
 
 
 
@@ -56,13 +57,28 @@ async def get_data(data: GetTodayDataModel):
 
 
 @app.get("/api/get_areas")
-async def get_data(): 
-    with engine.connect() as conn: 
-        result = conn.execute(areas.select()).fetchall() 
+async def get_all_data():
+    with engine.connect() as conn:
+        # Fetch data for areas
+        areas_result = conn.execute(areas.select()).fetchall()
+        areas_data = [{"id": area[0], "area_name": area[1]} for area in areas_result]
 
-        data = [{"id": area[0], "area_name": area[1]} for area in result]
+        # Fetch data for main_areas
+        main_areas_result = conn.execute(main_areas.select()).fetchall()
+        main_areas_data = [{"id": main_area[0], "main_area_name": main_area[1]} for main_area in main_areas_result]
 
-    return data 
+        # Fetch data for zones
+        zones_result = conn.execute(zone.select()).fetchall()
+        zones_data = [{"id": zone[0], "zone_name": zone[1]} for zone in zones_result]
+
+    # Combine all data into a single dictionary
+    data = {
+        "areas": areas_data,
+        "main_areas": main_areas_data,
+        "zones": zones_data
+    }
+
+    return data
 
 
 
@@ -97,7 +113,9 @@ async def signup_user(data: UserSignUpMode):
     username = data.username
     mobile_number = data.mobile_number
     password = data.password
-    area_id = data.area_id
+    area_id = data.area_id 
+    branch_id = data.branch_id 
+    zone_id = data.zone_id
 
     hashed_pass = hash_password(password) 
 

@@ -7,26 +7,35 @@ const SignUp = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [areaId, setAreaId] = useState("");
+  const [branchId, setBranchId] = useState("");
+  const [zoneId, setZoneId] = useState("");
   const [error, setError] = useState("");
-  const [areas, setAreas] = useState([]); 
+  const [data, setData] = useState({ areas: [], main_areas: [], zones: [] });
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
-    GetAreas().then((res) => {
-      setAreas(res.data) 
-      console.log(res.data)
-    })
-  }, [])
+    GetAreas()
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => console.error("Failed to fetch areas:", err));
+  }, []);
 
   function submitSignUp() {
-    signupUser({ username, mobile_number: phoneNumber, password, area_id: areaId })
-      .then((res) => {
-        console.log(res, "here");
-        navigate("/login/", { replace: true });
+    signupUser({
+      username,
+      mobile_number: phoneNumber,
+      password,
+      area_id: areaId,
+      branch_id: branchId,
+      zone_id: zoneId,
+    })
+      .then(() => {
+        navigate("/login", { replace: true });
       })
       .catch((err) => {
-        setError(err.response.data.detail);
+        setError(err.response?.data?.detail || "An error occurred");
       });
   }
 
@@ -37,9 +46,7 @@ const SignUp = () => {
 
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-        {/* Form */}
         <div className="space-y-4">
-          {/* Username Field */}
           <div>
             <label htmlFor="username" className="block text-gray-600 mb-2 font-semibold">
               Username
@@ -48,16 +55,12 @@ const SignUp = () => {
               type="text"
               id="username"
               value={username}
-              onChange={(e) => {
-                    setUsername(e.target.value)
-                  }
-              }
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
               className="w-full px-4 py-2 border rounded-lg text-gray-800 focus:ring-2 focus:ring-sky-500 outline-none"
             />
           </div>
 
-          {/* Phone Number Field */}
           <div>
             <label htmlFor="phone" className="block text-gray-600 mb-2 font-semibold">
               Mobile Number
@@ -67,17 +70,15 @@ const SignUp = () => {
               id="phone"
               value={phoneNumber}
               onChange={(e) => {
-                if (e.target.value.length < 11 && (!isNaN(e.target.value))){
-                  setPhoneNumber(e.target.value)
-                  }
+                if (e.target.value.length < 11 && !isNaN(e.target.value)) {
+                  setPhoneNumber(e.target.value);
                 }
-              }
+              }}
               placeholder="Enter your mobile number"
               className="w-full px-4 py-2 border rounded-lg text-gray-800 focus:ring-2 focus:ring-sky-500 outline-none"
             />
           </div>
 
-          {/* Password Field */}
           <div>
             <label htmlFor="password" className="block text-gray-600 mb-2 font-semibold">
               Password
@@ -92,10 +93,9 @@ const SignUp = () => {
             />
           </div>
 
-          {/* Area ID Dropdown */}
           <div>
             <label htmlFor="area_id" className="block text-gray-600 mb-2 font-semibold">
-              Area
+              Branch
             </label>
             <select
               id="area_id"
@@ -103,29 +103,67 @@ const SignUp = () => {
               onChange={(e) => setAreaId(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg text-gray-800 focus:ring-2 focus:ring-sky-500 outline-none"
             >
-              {/* <option value="">Select Area</option> */}
-              {areas && areas.map((area) => (
-                <option value={area.id} key={area.id}>{area.area_name}</option>
+              <option value="">Select Area</option>
+              {data.areas.map((area) => (
+                <option value={area.id} key={area.id}>
+                  {area.area_name}
+                </option>
               ))}
             </select>
           </div>
 
-          {/* Submit Button */}
+          <div>
+            <label htmlFor="branch_id" className="block text-gray-600 mb-2 font-semibold">
+              Area
+            </label>
+            <select
+              id="branch_id"
+              value={branchId}
+              onChange={(e) => setBranchId(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg text-gray-800 focus:ring-2 focus:ring-sky-500 outline-none"
+            >
+              <option value="">Select Branch</option>
+              {data.main_areas.map((branch) => (
+                <option value={branch.id} key={branch.id}>
+                  {branch.main_area_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="zone_id" className="block text-gray-600 mb-2 font-semibold">
+              Zone
+            </label>
+            <select
+              id="zone_id"
+              value={zoneId}
+              onChange={(e) => setZoneId(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg text-gray-800 focus:ring-2 focus:ring-sky-500 outline-none"
+            >
+              <option value="">Select Zone</option>
+              {data.zones.map((zone) => (
+                <option value={zone.id} key={zone.id}>
+                  {zone.zone_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div>
             <button
               type="submit"
               className="w-full bg-sky-600 text-white py-2 rounded-lg hover:bg-sky-700 transition duration-200"
-              onClick={() => submitSignUp()}
+              onClick={submitSignUp}
             >
               Sign Up
             </button>
           </div>
         </div>
 
-        {/* Additional Links */}
         <div className="mt-4 text-sm text-center">
           <p className="text-gray-600">
-            Already have an account?{" "}
+            Already have an account?{' '}
             <a href="/login" className="text-sky-600 hover:underline">
               Login
             </a>

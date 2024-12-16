@@ -10,7 +10,9 @@ class UserSignUpMode(BaseModel):
     username: str 
     mobile_number: str 
     password: str 
-    area_id: int 
+    area_id: int  
+    branch_id: int 
+    zone_id: int
 
 
 class LoginModel(BaseModel): 
