@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Form, File, UploadFile, HTTPException
-from models import GetTodayDataModel, LoginModel, UserSignUpMode, VerifyToken 
+from models import GetTodayDataModel, LoginModel, UserSignUpMode, VerifyToken, ToggleUser 
 from fastapi.middleware.cors import CORSMiddleware 
 import os 
 from fastapi.staticfiles import StaticFiles 
@@ -78,8 +78,34 @@ async def get_all_data():
         "zones": zones_data
     }
 
-    return data
+    return data 
 
+
+
+@app.get("/api/get_users")
+async def get_all_users():
+    with engine.connect() as conn:
+        rows = conn.execute(users.select()) 
+        user_list = [{
+            'id': row.id,
+            'username': row.username, 
+            'is_superuser': row.is_superuser, 
+            'is_area_admin': row.is_area_admin, 
+            'area_id': row.area_id, 
+            'mobile_number': row.mobile_number,
+        } for row in rows]
+
+    return user_list
+
+
+@app.post("/api/make_him_admin")
+async def make_him_admin(data: ToggleUser):  
+    with engine.connect() as conn: 
+        print(data.user_id, type(data.user_id), data.is_area_admin, type(data.is_area_admin))
+        update_user = users.update().where(users.c.id == data.user_id).values(is_area_admin = not data.is_area_admin)
+        conn.execute(update_user) 
+        conn.commit()
+    return {'hi': 'helo'}
 
 
 @app.post("/api/verify_token")

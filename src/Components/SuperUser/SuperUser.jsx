@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
+import { GetUsers, ToggleUser } from "../../ApiCalls/apicall"; 
+import { checkWithToken } from "../../ApiCalls/apicall";
+import { useNavigate } from "react-router-dom";
 
 const SuperUserPage = () => {
   const [area, setArea] = useState("");
   const [branch, setBranch] = useState("");
   const [zone, setZone] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [users, setUsers] = useState([
-    { id: 1, username: "John Doe", mobile: "1234567890", isAdmin: false },
-    { id: 2, username: "Jane Smith", mobile: "9876543210", isAdmin: true },
-    { id: 3, username: "Alice Brown", mobile: "1112223333", isAdmin: false },
-  ]);
+  const [users, setUsers] = useState([]);  
+  const navigate = useNavigate(); 
 
  const handleAddArea = () => {
   if (window.confirm("Are you sure you want to add this area?")) {
@@ -33,20 +33,38 @@ const handleAddZone = () => {
   }
 };
 
-  const handleToggleAdmin = (id) => {
+  const handleToggleAdmin = (user_obj) => { 
     setUsers((prevUsers) =>
       prevUsers.map((user) =>
-        user.id === id ? { ...user, isAdmin: !user.isAdmin } : user
+        user.id === user_obj.id ? { ...user, is_area_admin: !user.is_area_admin } : user
       )
     );
-    console.log("Toggled Admin for User ID:", id);
+    console.log("Toggled Admin for User ID:", user_obj); 
+    ToggleUser({user_id: user_obj.id, is_area_admin: user_obj.is_area_admin}); 
   };
 
   const filteredUsers = users.filter(
     (user) =>
-      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.mobile.includes(searchTerm)
-  );
+      user?.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user?.mobile_number.includes(searchTerm)
+  ); 
+
+  useEffect(() => { 
+    checkWithToken({ token: localStorage.getItem("access") })
+    .then((res) => { 
+      if (!res.data.is_superuser) {
+        navigate("/");
+      }
+    })
+    .catch(() => {
+      navigate("/login/");
+    }); 
+
+    GetUsers().then((res) => {
+      console.log(res.data); 
+      setUsers(res.data)
+    })
+  }, []) 
 
   return ( 
     <>
@@ -56,7 +74,7 @@ const handleAddZone = () => {
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Super User Panel</h1>
 
       {/* Input Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 display-none hidden">
         {/* Add Area */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -155,17 +173,17 @@ const handleAddZone = () => {
             {filteredUsers.map((user) => (
               <tr key={user.id} className="border-t">
                 <td className="px-6 py-4 text-sm text-gray-900">{user.username}</td>
-                <td className="px-6 py-4 text-sm text-gray-900">{user.mobile}</td>
+                <td className="px-6 py-4 text-sm text-gray-900">{user.mobile_number}</td>
                 <td className="px-6 py-4 text-center">
                   <button
-                    onClick={() => handleToggleAdmin(user.id)}
+                    onClick={() => handleToggleAdmin(user)}
                     className={`px-4 py-2 rounded-md ${
-                      user.isAdmin
+                      user.is_area_admin
                         ? "bg-red-500 text-white hover:bg-red-600"
                         : "bg-green-500 text-white hover:bg-green-600"
                     }`}
                   >
-                    {user.isAdmin ? "Remove Admin" : "Make Admin"}
+                    {user.is_area_admin ? "Remove Admin" : "Make Admin"}
                   </button>
                 </td>
               </tr>

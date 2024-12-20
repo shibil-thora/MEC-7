@@ -25,4 +25,9 @@ class VerifyToken(BaseModel):
 
 
 class GetTodayDataModel(BaseModel): 
-    date: str
+    date: str 
+
+
+class ToggleUser(BaseModel): 
+    user_id: int
+    is_area_admin: bool
